@@ -1,21 +1,16 @@
 #!/bin/bash
+shopt -s nullglob
 
-# Kaynak ve hedef klasörler
-SRC="$HOME/git-script/application-icon"
-DST="/usr/share/SatellaOS/application-icon"
+# SatellaOS arkaplan dizinini oluştur
+sudo mkdir -p /usr/share/SatellaOS/application-icon/
 
-# Kaynak dizin var mı kontrol et
-if [ ! -d "$SRC" ]; then
-    echo "❌ Kaynak dizin bulunamadı: $SRC"
-    exit 1
-fi
+# Arkaplan dosyalarını kopyala
+sudo cp ~/git-script/application-icon/*.{jpg,png} /usr/share/SatellaOS/application-icon/
 
-# Hedef dizin yoksa oluştur
-echo "[i] Hedef dizin $DST oluşturuluyor (varsa atlanır)..."
-sudo mkdir -p "$DST"
+# Dosya izinlerini ayarla
+sudo chmod 655 /usr/share/SatellaOS/application-icon/*
 
-# Tüm dosyaları kopyala
-echo "[i] application-icon dosyaları $DST içine kopyalanıyor..."
-sudo cp -r "$SRC/"* "$DST/"
+# Kullanıcı Pictures klasörüne sembolik link oluştur
+ln -s /usr/share/SatellaOS/application-icon "$(xdg-user-dir PICTURES)/application-icon" 2>/dev/null
 
-echo "[✔] application-icon dosyaları başarıyla $DST içine kopyalandı."
+echo "✔ Simgeler başarıyla yüklendi!"
